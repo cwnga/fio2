@@ -1,0 +1,102 @@
+<div id="{{mojit_view_id}}">
+<canvas id="canvasElement" width="200" height="100"></canvas>
+<img src="/static/fio2/assets/running.gif"  width="100">
+<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<script src="http://yui.yahooapis.com/3.15.0/build/yui/yui-min.js"></script>
+<br/>
+x:<input id = 'xInput' value='testtt'><br/>
+y:<input id = 'yInput' value='testtt'><br/>
+z:<input id = 'zInput' value='testtt'><br/>
+step:<input id = 'stepInput' value='testtt'><br/>
+diff:<input id = 'diffInput' value='testtt'><br/>
+<script>
+
+//drawStep(111);
+YUI().use('node', 'event', function (Y)
+{
+    function drawStep(step) {
+        var c=document.getElementById("myCanvas");
+        var ctx=c.getContext("2d");
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.font="20px Georgia";
+        ctx.fillText("running:"+step+"(step)",10,50);
+
+        ctx.font="30px Verdana";
+        // Create gradient
+        var gradient=ctx.createLinearGradient(0,0,c.width,0);
+        gradient.addColorStop("0","magenta");
+        gradient.addColorStop("0.5","blue");
+        gradient.addColorStop("1.0","red");
+    }
+    window.onkeypress = keypress;
+    step=1;
+    function keypress() {
+        step++;
+        drawStep(step);
+    }
+    preX = 0;
+    thresholdX = 15;///avg
+    maxtholdX = 0;
+
+    function start()
+    {
+
+        console.log("testst");
+        console.log("testst");
+        console.log("testst");
+        window.ondevicemotion = function(event) {
+            x = event.accelerationIncludingGravity.x
+            y = event.accelerationIncludingGravity.y
+            z = event.accelerationIncludingGravity.z
+            console.log("testst");
+            console.log("testst");
+            console.log("testst");
+            console.log("testst");
+            Y.one('#xInput').set("value", x);
+            Y.one('#yInput').set("value", y);
+            Y.one('#zInput').set("value", z);
+            diff = (Math.abs(x) - Math.abs(preX));
+            if (diff > maxtholdX) {
+                maxtholdX = diff;
+
+                Y.one('#diffInput').set("value", maxtholdX);
+            }
+
+
+            if (diff > thresholdX) {
+                step++;
+                drawStep(step);
+                Y.one('#stepInput').set("value", step);
+                ///send
+            } else {
+
+
+            }
+            preX = x;
+
+
+
+            //    if (true) {
+                ///send data
+                ///id, name, step,
+                ///return proi, win,
+
+                //            step++;
+                //          drawStep(step);
+                //  }
+            }
+        }
+        start();
+    }
+);
+
+
+// Fill with gradient
+/*
+ ctx.fillStyle=gradient;
+ ctx.fillText("Big smile!",10,90);
+ */
+
+</script>
+</div>
